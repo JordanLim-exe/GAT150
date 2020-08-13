@@ -10,6 +10,11 @@
 // add headers that you want to pre-compile here
 #include "framework.h"
 
+#include "Math/Math.h"
+#include "Math/Random.h"
+#include "Math/Transform.h"
+#include "Math/Color.h"
+
 #include "Math/Vector2.h"
 
 #include <SDL.h>

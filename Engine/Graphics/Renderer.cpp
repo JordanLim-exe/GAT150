@@ -3,11 +3,7 @@
 
 bool nc::Renderer::Startup()
 {
-	//access simple direct media library
-	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-		std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
-		return false;
-	}
+
 
 	//enable different image formats to be loaded
 	IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);

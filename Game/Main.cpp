@@ -1,14 +1,13 @@
 #include "pch.h"
 #include "Graphics/Texture.h"
-#include "Graphics/Renderer.h"
-#include "Resources/ResourceManager.h"
-#include "Input/InputSystem.h"
-#include "Core/Timer.h"
+#include "Engine.h"
+#include "Objects/GameObject.h"
+#include "Components/PhysicsComponent.h"
+#include "Components/SpriteComponent.h"
 
-nc::InputSystem inputSystem;
-nc::ResourceManager resourceManager;
-nc::Renderer renderer;
-nc::FrameTimer timer;
+
+nc::Engine engine;
+nc::GameObject player;
 
 int main(int, char**)
 {
@@ -17,19 +16,23 @@ int main(int, char**)
 	//for (size_t i = 0; i < 1000; i++) { std::sqrt(rand() % 100); }
 	//std::cout << timer.ElapsedSeconds() << std::endl;
 	
-
-	renderer.Startup();
-	renderer.Create("GAT150", 800, 600);
-
-	inputSystem.Startup();
+	engine.Startup();
 	
+	player.Create(&engine);
+	player.m_transform.position = { 400, 300 };
+	player.m_transform.angle = 45;
 
-	nc::Texture* car = resourceManager.Get<nc::Texture>("cars.png", &renderer);
-	nc::Texture* texture2 = resourceManager.Get<nc::Texture>("background.png", &renderer);
+	nc::Component* component = new nc::PhysicsComponent;
+	player.AddComponent(component);
+	component->Create();
+
+	component = new nc::SpriteComponent;
+	player.AddComponent(component);
+	component->Create();
+
+	//texture
+	nc::Texture* texture2 = engine.GetSystem<nc::ResourceManager>()->Get<nc::Texture>("background.png", engine.GetSystem<nc::Renderer>());
 	
-	float angle{ 0 };
-	nc::Vector2 position{ 400, 300 };
-
 	SDL_Event event;
 	bool quit = false;
 	while (!quit) {
@@ -43,37 +46,35 @@ int main(int, char**)
 		}
 
 		//update
-		timer.Tick();
-		inputSystem.Update();
+		engine.Update();
 
-		renderer.BeginFrame(); //begin
-
-		angle += 1.0f;
-
-		if (inputSystem.GetButtonState(SDL_SCANCODE_LEFT) == nc::InputSystem::eButtonState::HELD)
+		//controller
+		if (engine.GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_LEFT) == nc::InputSystem::eButtonState::HELD)
 		{
-			position.x = position.x - 200.0f * timer.DeltaTime();
+			player.m_transform.angle -= 200.0f * engine.GetTimer().DeltaTime();
 		}
-		if (inputSystem.GetButtonState(SDL_SCANCODE_RIGHT) == nc::InputSystem::eButtonState::HELD)
+		if (engine.GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_RIGHT) == nc::InputSystem::eButtonState::HELD)
 		{
-			position.x = position.x + 200.0f * timer.DeltaTime();
+			player.m_transform.angle += 200.0f * engine.GetTimer().DeltaTime();
 		}
 
+		//physics
+		nc::Vector2 force{ 0,0 };
+		if (engine.GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_UP) == nc::InputSystem::eButtonState::HELD) {
+			force = nc::Vector2::forward * 1000.0f;
+		}
+		force = nc::Vector2::Rotate(force, nc::dtor(player.m_transform.angle));
+
+		engine.GetSystem<nc::Renderer>()->BeginFrame(); //begin
 
 		texture2->Draw({ 0, 0 }, { 1, 1 }, 0);
-		car->Draw({0, 16, 64, 144}, { 170, 0 }, { 1, 1 }, 0);
 
-		renderer.EndFrame(); //end
+		player.Draw();
+
+		engine.GetSystem<nc::Renderer>()->EndFrame(); //end
 	}
 
-
-
-	// wait for keyboard enter to exit
-	std::getchar();
-
-	renderer.Shutdown();
-	inputSystem.Shutdown();
-	SDL_Quit();
+	engine.Shutdown();
 
 	return 0;
 }

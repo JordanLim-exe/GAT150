@@ -23,7 +23,9 @@ namespace nc {
 	class FrameTimer : public Timer {
 	public:
 		void Tick();
-		float DeltaTime() { return m_dt; }
+		float DeltaTime() {
+			return 0.016f;
+		}//m_dt; }
 
 	protected:
 		float m_dt{ 0 };
