@@ -12,6 +12,8 @@ namespace nc {
 		virtual bool Create(void* data = nullptr) override;
 		virtual void Destroy() override;
 
+		void Read(const rapidjson::Value& value) override;
+
 		template<typename T>
 		T* GetComponent() {
 			T* result{ nullptr };
@@ -24,7 +26,7 @@ namespace nc {
 
 		void AddComponent(Component* component);
 		void RemoveComponent(Component* component);
-		void RemoveAllComponent();
+		void RemoveAllComponents();
 
 		void Update();
 		void Draw();

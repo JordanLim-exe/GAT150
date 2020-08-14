@@ -12,6 +12,13 @@ namespace nc {
 
 	void GameObject::Destroy()
 	{
+		RemoveAllComponents();
+	}
+	void GameObject::Read(const rapidjson::Value& value)
+	{
+		nc::json::Get(value, "position", m_transform.position);
+		nc::json::Get(value, "scale", m_transform.scale);
+		nc::json::Get(value, "angle", m_transform.angle);
 	}
 	void GameObject::AddComponent(Component* component)
 	{
@@ -27,7 +34,7 @@ namespace nc {
 		}
 
 	}
-	void GameObject::RemoveAllComponent()
+	void GameObject::RemoveAllComponents()
 	{
 		for (auto component : m_components) {
 			component->Destroy();

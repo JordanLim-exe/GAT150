@@ -4,10 +4,14 @@
 #include "Objects/GameObject.h"
 #include "Components/PhysicsComponent.h"
 #include "Components/SpriteComponent.h"
+#include "Components/PlayerComponent.h"
+#include "Core/Json.h"
 
 
 nc::Engine engine;
 nc::GameObject player;
+
+
 
 int main(int, char**)
 {
@@ -15,12 +19,14 @@ int main(int, char**)
 	////profile
 	//for (size_t i = 0; i < 1000; i++) { std::sqrt(rand() % 100); }
 	//std::cout << timer.ElapsedSeconds() << std::endl;
+	rapidjson::Document document;
+
 	
 	engine.Startup();
 	
 	player.Create(&engine);
-	player.m_transform.position = { 400, 300 };
-	player.m_transform.angle = 45;
+	nc::json::Load("player.txt", document);
+	player.Read(document);
 
 	nc::Component* component = new nc::PhysicsComponent;
 	player.AddComponent(component);
@@ -28,8 +34,16 @@ int main(int, char**)
 
 	component = new nc::SpriteComponent;
 	player.AddComponent(component);
+	nc::json::Load("sprite.txt", document);
+	component->Read(document);
 	component->Create();
 
+	component = new nc::PlayerComponent;
+	player.AddComponent(component);
+	component->Create();
+	
+	
+	
 	//texture
 	nc::Texture* texture2 = engine.GetSystem<nc::ResourceManager>()->Get<nc::Texture>("background.png", engine.GetSystem<nc::Renderer>());
 	
@@ -47,23 +61,12 @@ int main(int, char**)
 
 		//update
 		engine.Update();
+		player.Update();
 
-		//controller
-		if (engine.GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_LEFT) == nc::InputSystem::eButtonState::HELD)
+		if (engine.GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_ESCAPE) == nc::InputSystem::eButtonState::HELD)
 		{
-			player.m_transform.angle -= 200.0f * engine.GetTimer().DeltaTime();
+			quit = true;
 		}
-		if (engine.GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_RIGHT) == nc::InputSystem::eButtonState::HELD)
-		{
-			player.m_transform.angle += 200.0f * engine.GetTimer().DeltaTime();
-		}
-
-		//physics
-		nc::Vector2 force{ 0,0 };
-		if (engine.GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_UP) == nc::InputSystem::eButtonState::HELD) {
-			force = nc::Vector2::forward * 1000.0f;
-		}
-		force = nc::Vector2::Rotate(force, nc::dtor(player.m_transform.angle));
 
 		engine.GetSystem<nc::Renderer>()->BeginFrame(); //begin
 
