@@ -30,5 +30,6 @@
 #include <map>
 #include <chrono>
 #include <cassert>
+#include <functional>
 
 #endif //PCH_H

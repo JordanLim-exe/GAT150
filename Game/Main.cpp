@@ -6,12 +6,12 @@
 #include "Components/SpriteComponent.h"
 #include "Components/PlayerComponent.h"
 #include "Core/Json.h"
+#include "Core/Factory.h"
 
 
 nc::Engine engine;
 nc::GameObject player;
-
-
+nc::Factory<nc::Object, std::string> objectFactory;
 
 int main(int, char**)
 {
@@ -23,23 +23,29 @@ int main(int, char**)
 
 	
 	engine.Startup();
-	
-	player.Create(&engine);
-	nc::json::Load("player.txt", document);
-	player.Read(document);
 
-	nc::Component* component = new nc::PhysicsComponent;
-	player.AddComponent(component);
+	objectFactory.Register("GameObject", nc::Object::Instantiate<nc::GameObject>);
+	objectFactory.Register("PhysicsComponent", nc::Object::Instantiate<nc::PhysicsComponent>);
+	
+	nc::GameObject* player = objectFactory.Create<nc::GameObject>("GameObject");
+
+	player->Create(&engine);
+	nc::json::Load("player.txt", document);
+	player->Read(document);
+
+	nc::Component* component;
+	component = objectFactory.Create<nc::Component>("PhysicsComponent");
+	player->AddComponent(component);
 	component->Create();
 
 	component = new nc::SpriteComponent;
-	player.AddComponent(component);
+	player->AddComponent(component);
 	nc::json::Load("sprite.txt", document);
 	component->Read(document);
 	component->Create();
 
 	component = new nc::PlayerComponent;
-	player.AddComponent(component);
+	player->AddComponent(component);
 	component->Create();
 	
 	
@@ -61,7 +67,7 @@ int main(int, char**)
 
 		//update
 		engine.Update();
-		player.Update();
+		player->Update();
 
 		if (engine.GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_ESCAPE) == nc::InputSystem::eButtonState::HELD)
 		{
@@ -72,7 +78,7 @@ int main(int, char**)
 
 		texture2->Draw({ 0, 0 }, { 1, 1 }, 0);
 
-		player.Draw();
+		player->Draw();
 
 		engine.GetSystem<nc::Renderer>()->EndFrame(); //end
 	}

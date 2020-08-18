@@ -172,6 +172,7 @@
     <ClInclude Include="Components\RenderComponent.h" />
     <ClInclude Include="Components\SpriteComponent.h" />
     <ClInclude Include="Core\Assert.h" />
+    <ClInclude Include="Core\Factory.h" />
     <ClInclude Include="Core\Json.h" />
     <ClInclude Include="Core\System.h" />
     <ClInclude Include="Core\Timer.h" />
