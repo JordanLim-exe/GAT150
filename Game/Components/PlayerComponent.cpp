@@ -5,6 +5,7 @@
 namespace nc {
 	bool nc::PlayerComponent::Create(void* data)
 	{
+		m_owner = static_cast<GameObject*>(data);
 		return true;
 	}
 

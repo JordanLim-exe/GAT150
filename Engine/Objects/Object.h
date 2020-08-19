@@ -8,6 +8,7 @@ namespace nc {
 		virtual void Destroy() = 0;
 
 		virtual void Read(const rapidjson::Value& value) {}
+		virtual void Update() = 0;
 
 		template<typename T>
 		static Object* Instantiate() {

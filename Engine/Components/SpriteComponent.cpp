@@ -5,9 +5,7 @@
 namespace nc {
 	bool nc::SpriteComponent::Create(void* data)
 	{
-		//"cars.png"
-		m_texture = m_owner->m_engine->GetSystem<nc::ResourceManager>()->Get<nc::Texture>(m_textureName, m_owner->m_engine->GetSystem<nc::Renderer>());
-		ASSERT(m_texture);
+		m_owner = static_cast<GameObject*>(data);
 		return true;
 	}
 
@@ -27,7 +25,9 @@ namespace nc {
 
 	void nc::SpriteComponent::Draw()
 	{
+		Texture* texture = m_owner->m_engine->GetSystem<nc::ResourceManager>()->Get<nc::Texture>(m_textureName, m_owner->m_engine->GetSystem<nc::Renderer>());
+
 		//{ 0, 16, 64, 144 }
-		m_texture->Draw(m_rect, m_owner->m_transform.position, nc::Vector2{ 1, 1 } * m_owner->m_transform.scale, m_owner->m_transform.angle);
+		texture->Draw(m_rect, m_owner->m_transform.position, nc::Vector2{ 1, 1 } * m_owner->m_transform.scale, m_owner->m_transform.angle);
 	}
 }

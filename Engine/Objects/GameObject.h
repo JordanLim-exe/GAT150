@@ -31,10 +31,13 @@ namespace nc {
 		void Update();
 		void Draw();
 
+		void ReadComponents(const rapidjson::Value& value);
+
 		friend class Component;
 		friend class PhysicsComponent;
 
 	public:
+		std::string m_name;
 		Transform m_transform;
 		Engine* m_engine;
 
