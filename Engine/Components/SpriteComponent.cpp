@@ -16,6 +16,7 @@ namespace nc {
 	void SpriteComponent::Read(const rapidjson::Value& value)
 	{
 		nc::json::Get(value, "texture", m_textureName);
+		nc::json::Get(value, "origin", m_origin);
 		nc::json::Get(value, "rect", m_rect);
 	}
 
@@ -28,6 +29,6 @@ namespace nc {
 		Texture* texture = m_owner->m_engine->GetSystem<nc::ResourceManager>()->Get<nc::Texture>(m_textureName, m_owner->m_engine->GetSystem<nc::Renderer>());
 
 		//{ 0, 16, 64, 144 }
-		texture->Draw(m_rect, m_owner->m_transform.position, nc::Vector2{ 1, 1 } * m_owner->m_transform.scale, m_owner->m_transform.angle);
+		texture->Draw(m_rect, m_owner->m_transform.position, m_owner->m_transform.angle, nc::Vector2{ 1, 1 } * m_owner->m_transform.scale, m_origin);
 	}
 }
