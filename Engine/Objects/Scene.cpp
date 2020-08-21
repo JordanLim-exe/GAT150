@@ -18,11 +18,21 @@ namespace nc {
 
 	void Scene::Read(const rapidjson::Value& value)
 	{
-		const rapidjson::Value& objectsValue = value["GameObjects"];
-		if (objectsValue.IsArray())
-		{
-			ReadGameObjects(objectsValue);
+		if (value.HasMember("Prototypes")) {
+			const rapidjson::Value& objectsValue = value["Prototypes"];
+			if (objectsValue.IsArray())
+			{
+				ReadPrototypes(objectsValue);
+			}
 		}
+		if (value.HasMember("GameObjects")) {
+			const rapidjson::Value& objectsValue = value["GameObjects"];
+			if (objectsValue.IsArray())
+			{
+				ReadGameObjects(objectsValue);
+			}
+		}
+
 	}
 
 	void Scene::ReadGameObjects(const rapidjson::Value& value)
@@ -43,6 +53,29 @@ namespace nc {
 					gameObject->Read(objectValue);
 					// call AddGameObject passing in the game object
 					AddGameObject(gameObject);
+				}
+			}
+		}
+	}
+
+	void Scene::ReadPrototypes(const rapidjson::Value& value)
+	{
+		for (rapidjson::SizeType i = 0; i < value.Size(); i++) {
+			const rapidjson::Value& objectValue = value[i];
+			if (objectValue.IsObject())
+			{
+				std::string typeName;
+				// read component “type” name from json (Get)
+				json::Get(objectValue, "type", typeName);
+				nc::GameObject* gameObject = nc::ObjectFactory::Instance().Create<nc::GameObject>(typeName);// get from object factory, use typeName as the key
+
+				if (gameObject)
+				{
+					gameObject->Create(m_engine);
+					// call game object read (pass in objectValue)
+					gameObject->Read(objectValue);
+					// call AddGameObject passing in the game object
+					ObjectFactory::Instance().Register(gameObject->m_name, new Prototype<Object>(gameObject));
 				}
 			}
 		}

@@ -18,12 +18,20 @@ int main(int, char**)
 	engine.Startup();
 
 	nc::ObjectFactory::Instance().Initialize();
-	nc::ObjectFactory::Instance().Register("PlayerComponent", nc::Object::Instantiate<nc::PlayerComponent>);
-	
-	scene.Create(&engine);
+	nc::ObjectFactory::Instance().Register("PlayerComponent", new nc::Creator<nc::PlayerComponent, nc::Object>);
+
 	rapidjson::Document document;
 	nc::json::Load("scene.txt", document);
+	
+	scene.Create(&engine);
 	scene.Read(document);
+
+	for (size_t i = 0; i < 10; i++) {
+		nc::GameObject* gameObject = nc::ObjectFactory::Instance().Create<nc::GameObject>("p_Explosion");
+		gameObject->m_transform.position = nc::Vector2{ nc::random(0, 800), nc::random(0, 600) };
+		gameObject->m_transform.angle = nc::random(0, 360);
+		scene.AddGameObject(gameObject);
+	}
 
 	/*player->Create(&engine);
 	nc::json::Load("player.txt", document);

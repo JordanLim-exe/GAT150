@@ -1,6 +1,33 @@
 {
-	"GameObjects":
-	[
+	"Prototypes":[
+		{
+			"type":"GameObject",
+			"name":"p_Explosion",
+			"position":
+			[
+				300,
+				400
+			],
+			"scale":1,
+			"angle":45,
+			"Components":
+			[
+				{
+					"type":"SpriteAnimationComponent",
+					"texture":"explosion.png",
+					"origin": [
+						0.5, 
+						0.5
+					],
+					"numX": 5,
+					"numY": 5,
+					"numFrames": 25,
+					"fps": 30
+				}
+			]
+		}
+	],
+	"GameObjects":[
 		{
 			"type":"GameObject",
 			"name":"Background",
