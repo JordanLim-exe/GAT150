@@ -74,6 +74,9 @@ namespace nc {
 					gameObject->Create(m_engine);
 					// call game object read (pass in objectValue)
 					gameObject->Read(objectValue);
+
+					std::cout << gameObject->m_name << std::endl;
+
 					// call AddGameObject passing in the game object
 					ObjectFactory::Instance().Register(gameObject->m_name, new Prototype<Object>(gameObject));
 				}

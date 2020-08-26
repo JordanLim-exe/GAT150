@@ -6,6 +6,8 @@ namespace nc
 {
 	class GameObject;
 
+	class ContactListener;
+
 	class PhysicsSystem : public System
 	{
 	public:
@@ -13,6 +15,7 @@ namespace nc
 			Vector2 size;
 			float density{ 0 };
 			float friction{ 1 };
+			float restitution{ 0.3f };
 			bool lockAngle{ false };
 			bool isDynamic{ false };
 		};
@@ -27,5 +30,6 @@ namespace nc
 
 	protected:
 		b2World* m_world{ nullptr };
+		ContactListener* m_cL{nullptr};
 	};
 }

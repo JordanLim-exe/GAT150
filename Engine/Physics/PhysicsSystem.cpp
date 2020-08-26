@@ -1,12 +1,16 @@
 #include "pch.h"
 #include "PhysicsSystem.h"
 #include "Objects/GameObject.h"
+#include "ContactListener.h"
 
 namespace nc {
 	bool PhysicsSystem::Startup()
 	{
 		b2Vec2 gravity{ 0, 150 };
 		m_world = new b2World(gravity);
+
+		m_cL = new ContactListener;
+		m_world->SetContactListener(m_cL);
 
 		return true;
 	}
@@ -52,9 +56,10 @@ namespace nc {
 		shape.SetAsBox(data.size.x, data.size.y);
 
 		b2FixtureDef fixtureDef;
-		fixtureDef.shape = &shape;
 		fixtureDef.density = data.density;
 		fixtureDef.friction = data.friction;
+		fixtureDef.restitution = data.restitution;
+		fixtureDef.shape = &shape;
 		fixtureDef.userData = gameObject;
 
 

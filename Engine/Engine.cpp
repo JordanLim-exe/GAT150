@@ -4,6 +4,8 @@
 namespace nc {
 	bool nc::Engine::Startup()
 	{
+		srand(static_cast<unsigned int>(time(nullptr)));
+
 		//access simple direct media library
 		if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 			std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
