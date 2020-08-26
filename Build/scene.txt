@@ -3,13 +3,16 @@
 		{
 			"type":"GameObject",
 			"name":"p_Explosion",
+			"tag":"SFX",
+			"transient":true,
+			"lifetime":1.0,
 			"position":
 			[
 				300,
 				400
 			],
 			"scale":1,
-			"angle":45,
+			"angle":0,
 			"Components":
 			[
 				{
@@ -30,11 +33,11 @@
 	"GameObjects":[
 		{
 			"type":"GameObject",
-			"name":"Background",
+			"name":"Ground",
 			"position":
 			[
-				0,
-				0
+				400,
+				450
 			],
 			"scale":1,
 			"angle":0,
@@ -42,74 +45,85 @@
 			[
 				{
 					"type":"SpriteComponent",
-					"texture":"background.png",
+					"texture":"ground.png",
+					"origin": [0.5, 0.5],
 					"rect":
 					[
 						0,
 						0,
-						840,
-						650
+						800,
+						32
 					]
+				},
+				{
+					"type":"RigidBodyComponent",
+					"isDynamic":false,
+					"lockAngle":true,
+					"size":[400, 16],
+					"density":1,
+					"friction":1
 				}
 			]
 		},
 		{
 			"type":"GameObject",
 			"name":"Player",
+			"tag":"Player",
 			"position":
 			[
-				300,
-				400
+				400,
+				300
 			],
 			"scale":1,
-			"angle":45,
+			"angle":0,
 			"Components":
 			[
 				{
-					"type":"PhysicsComponent"
+					"type":"RigidBodyComponent",
+					"isDynamic":true,
+					"lockAngle":true,
+					"size":[16, 32],
+					"density":1,
+					"friction":1
 				},
 				{
 					"type":"PlayerComponent"
 				},
 				{
 					"type":"SpriteComponent",
-					"texture":"cars.png",
+					"texture":"player.png",
 					"origin": [0.5, 0.5],
 					"rect":
 					[
-						64,
-						110,
-						60,
-						112
+						0,
+						0,
+						32,
+						64
 					]
 				}
 			]
 		},
 		{
-			"type":"GameObject",
+			"type":"p_Explosion",
 			"name":"Explosion",
 			"position":
 			[
-				300,
-				400
+				500,
+				200
 			],
 			"scale":1,
-			"angle":45,
-			"Components":
+			"angle":0
+		},
+		{
+			"type":"p_Explosion",
+			"name":"Explosion",
+			"position":
 			[
-				{
-					"type":"SpriteAnimationComponent",
-					"texture":"explosion.png",
-					"origin": [
-						0.5, 
-						0.5
-					],
-					"numX": 5,
-					"numY": 5,
-					"numFrames": 25,
-					"fps": 30
-				}
-			]
+				100,
+				200
+			],
+			"scale":2,
+			"angle":0
 		}
 	]
 }
