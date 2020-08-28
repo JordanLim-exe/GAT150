@@ -23,7 +23,7 @@ namespace nc {
 
 		virtual bool Create(void* data = nullptr) override;
 		virtual void Destroy() override;
-		virtual Object* Clone() override { return new GameObject{*this}; }
+		virtual Object* Clone() const override { return new GameObject{*this}; }
 
 		void Read(const rapidjson::Value& value) override;
 
@@ -46,6 +46,7 @@ namespace nc {
 
 		void BeginContact(GameObject* other);
 		void EndContact(GameObject* other);
+		std::vector<GameObject*> GetContactsWithTag(const std::string& tag);
 
 		void ReadComponents(const rapidjson::Value& value);
 
@@ -64,5 +65,6 @@ namespace nc {
 
 	protected:
 		std::vector<Component*> m_components;
+		std::list<GameObject*> m_contacts;
 	};
 }

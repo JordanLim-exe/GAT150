@@ -6,7 +6,7 @@ namespace nc {
 	public:// Inherited via Component
 		virtual bool Create(void* data = nullptr) override;
 		virtual void Destroy() override;
-		virtual Object* Clone() override { return new PhysicsComponent{ *this }; }
+		virtual Object* Clone() const override { return new PhysicsComponent{ *this }; }
 
 		virtual void Update() override;
 

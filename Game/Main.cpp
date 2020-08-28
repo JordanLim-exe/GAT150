@@ -27,9 +27,9 @@ int main(int, char**)
 	scene.Read(document);
 
 	for (size_t i = 0; i < 10; i++) {
-		nc::GameObject* gameObject = nc::ObjectFactory::Instance().Create<nc::GameObject>("p_Box");
-		gameObject->m_transform.position = nc::Vector2{ nc::random(0, 800), nc::random(0, 600) };
-		gameObject->m_transform.angle = nc::random(0, 360);
+		nc::GameObject* gameObject = nc::ObjectFactory::Instance().Create<nc::GameObject>("p_Coin");
+		gameObject->m_transform.position = nc::Vector2{ nc::random(0, 800), nc::random(150, 450) };
+		//gameObject->m_transform.angle = nc::random(0, 360);
 		scene.AddGameObject(gameObject);
 	}
 

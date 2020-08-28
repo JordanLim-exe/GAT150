@@ -105,7 +105,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Middleware\SDL2-2.0.12\include;$(SolutionDir)Engine;$(SolutionDir)Middleware\JSON\include\rapidjson;$(SolutionDir)Middleware\Box2D\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Middleware\SDL2-2.0.12\include;$(SolutionDir)Engine;$(SolutionDir)Middleware\JSON\include\rapidjson;$(SolutionDir)Middleware\Box2D\include;$(SolutionDir)Middleware\FMOD\api\core\inc</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -141,7 +141,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Middleware\SDL2-2.0.12\include;$(SolutionDir)Engine;$(SolutionDir)Middleware\JSON\include\rapidjson;$(SolutionDir)Middleware\Box2D\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Middleware\SDL2-2.0.12\include;$(SolutionDir)Engine;$(SolutionDir)Middleware\JSON\include\rapidjson;$(SolutionDir)Middleware\Box2D\include;$(SolutionDir)Middleware\FMOD\api\core\inc</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
