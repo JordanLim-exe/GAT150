@@ -19,6 +19,7 @@ namespace nc
                 document.ParseStream(istream);
                 success = document.IsObject();
                 ASSERT_MSG(success, "Error json is not valid : " + filename);
+                stream.close();
             }
             return success;
         }
@@ -205,6 +206,65 @@ namespace nc
             return true;
         }
 
+		bool Get(const rapidjson::Value& value, const std::string& name, std::vector<std::string>& data)
+		{
+            // check if 'name' member exists
+            auto iter = value.FindMember(name.c_str());
+            if (iter == value.MemberEnd())
+            {
+                return false;
+            }
+
+            // check if type is desired type
+            auto& property = iter->value;
+            if (property.IsArray() == false)
+            {
+                return false;
+            }
+
+            for (rapidjson::SizeType i = 0; i < property.Size(); i++)
+            {
+                if (property[i].IsString())
+                {
+                    data.push_back(property[i].GetString());
+                }
+            }
+
+            // set data
+            
+
+            return true;
+		}
+
+        bool Get(const rapidjson::Value& value, const std::string& name, std::vector<int>& data)
+        {
+            // check if 'name' member exists
+            auto iter = value.FindMember(name.c_str());
+            if (iter == value.MemberEnd())
+            {
+                return false;
+            }
+
+            // check if type is desired type
+            auto& property = iter->value;
+            if (property.IsArray() == false)
+            {
+                return false;
+            }
+
+            for (rapidjson::SizeType i = 0; i < property.Size(); i++)
+            {
+                if (property[i].IsInt())
+                {
+                    data.push_back(property[i].GetInt());
+                }
+            }
+
+            // set data
+
+
+            return true;
+        }
     }
 }
 

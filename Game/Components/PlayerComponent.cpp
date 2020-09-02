@@ -1,12 +1,18 @@
 #include "pch.h"
 #include "PlayerComponent.h"
 #include "Components/RigidBodyComponent.h"
+#include "Components/SpriteComponent.h"
 #include "Components/AudioComponent.h"
+#include "Core/EventManager.h"
 
 namespace nc {
 	bool nc::PlayerComponent::Create(void* data)
 	{
 		m_owner = static_cast<GameObject*>(data);
+
+		EventManager::Instance().Subscribe("CollisionEnter", std::bind(&PlayerComponent::OnCollisionEnter, this, std::placeholders::_1), m_owner);
+		EventManager::Instance().Subscribe("CollisionExit", std::bind(&PlayerComponent::OnCollisionExit, this, std::placeholders::_1), m_owner);
+
 		return true;
 	}
 
@@ -36,6 +42,7 @@ namespace nc {
 			AudioComponent* audioComponent = m_owner->GetComponent<AudioComponent>();
 			if (audioComponent)
 			{
+				audioComponent->SetSoundName("jump.wav");
 				audioComponent->Play();
 			}
 		}
@@ -45,12 +52,36 @@ namespace nc {
 		PhysicsComponent* component = m_owner->GetComponent<RigidBodyComponent>();
 		if (component) {
 			component->ApplyForce(force);
+
+			Vector2 velocity = component->GetVelocity();
+
+			SpriteComponent* spriteComponent = m_owner->GetComponent<SpriteComponent>();
+			if (velocity.x <= -0.15) spriteComponent->Flip();
+			if (velocity.x >= 0.15) spriteComponent->Flip(false);
+		}
+	}
+
+	void PlayerComponent::OnCollisionEnter(const Event& event)
+	{
+		GameObject* gameObject = dynamic_cast<GameObject*>(event.sender);
+
+		if (gameObject->m_tag == "Enemy") {
+			AudioComponent* audioComponent = m_owner->GetComponent<AudioComponent>();
+			audioComponent->SetSoundName("grunt.wav");
+			audioComponent->Play();
 		}
 
-		auto coinContacts = m_owner->GetContactsWithTag("Coin");
-		for (GameObject* contact : coinContacts) {
-			contact->m_flags[GameObject::eFlag::DESTROY] = true;
-			//play sound
+		if (gameObject->m_tag == "Coin") {
+			gameObject->m_flags[GameObject::eFlag::DESTROY] = true;
+			AudioComponent* audioComponent = m_owner->GetComponent<AudioComponent>();
+			audioComponent->SetSoundName("coin.wav");
+			audioComponent->Play();
 		}
+
+		std::cout << "collision enter:" << gameObject->m_name << std::endl;
+	}
+	void PlayerComponent::OnCollisionExit(const Event& event)
+	{
+
 	}
 }

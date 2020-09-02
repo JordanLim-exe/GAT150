@@ -23,24 +23,30 @@ namespace nc {
 		json::Get(value, "density", m_data.density);
 		json::Get(value, "friction", m_data.friction);
 		json::Get(value, "restitution", m_data.restitution);
+		json::Get(value, "gravityScale", m_data.gravityScale);
 	}
 
 	void RigidBodyComponent::Update()
 	{
 		if (m_body == nullptr) {
 			m_body = m_owner->m_engine->GetSystem<PhysicsSystem>()->CreateBody(m_owner->m_transform.position, m_owner->m_transform.angle, m_data, m_owner);
-			
+			m_body->SetGravityScale(m_data.gravityScale);
 			//m_body->SetTransform(m_owner->m_transform.position, nc::rtod(m_owner->m_transform.angle));
 		}
 
 		m_owner->m_transform.position = PhysicsSystem::WorldtoScreen(m_body->GetPosition());
 		m_owner->m_transform.angle = nc::rtod(m_body->GetAngle());
+
+		m_velocity = m_body->GetLinearVelocity();
+		m_velocity.x = nc::Clamp(m_velocity.x, -5.0f, 5.0f);
+		m_body->SetLinearVelocity(m_velocity);
 	}
 
 	void RigidBodyComponent::ApplyForce(const Vector2& force)
 	{
-		m_body->SetGravityScale(2.0f);
-		m_body->ApplyForceToCenter(force, true);
-		m_body->SetLinearDamping(0.05f);
+		if (m_body) {
+			m_body->ApplyForceToCenter(force, true);
+			m_body->SetLinearDamping(0.05f);
+		}
 	}
 }

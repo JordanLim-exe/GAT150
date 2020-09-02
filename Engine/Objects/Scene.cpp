@@ -48,7 +48,7 @@ namespace nc {
 
 				if (gameObject)
 				{
-					gameObject->Create(m_engine);
+					gameObject->Create(this);
 					// call game object read (pass in objectValue)
 					gameObject->Read(objectValue);
 					// call AddGameObject passing in the game object
@@ -71,7 +71,7 @@ namespace nc {
 
 				if (gameObject)
 				{
-					gameObject->Create(m_engine);
+					gameObject->Create(this);
 					// call game object read (pass in objectValue)
 					gameObject->Read(objectValue);
 
